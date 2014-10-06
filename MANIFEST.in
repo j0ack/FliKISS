@@ -1,0 +1,2 @@
+include *.txt *.md
+recursive-include flikiss *.html *.css *.js *.png *.ico *.otf *.svg *.eot *.ttf *.woff
