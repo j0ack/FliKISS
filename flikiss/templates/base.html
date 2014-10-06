@@ -1,8 +1,69 @@
-<!doctype>
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
   <head>
+    <meta charset="utf-8">
+    <title>FliKISS - a KISS wiki engine</title>
+    <meta name="description" content="FliKISS - A simple wiki app">
     <meta name="author" content="TROUVERIE Joachim">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/skeleton.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/flikiss.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pygments.css') }}">
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon.png') }}">
+    {% block head %}
+    {% endblock %}
   </head>
   <body>
+    <div class="container">
+      <!-- header -->
+      <div class="row" id="header">
+        <h1>
+          {% if config.WIKI_TITLE %}
+            {{ config.WIKI_TITLE }}
+          {% else %}
+            FliKISS
+          {% endif %}
+        </h1>
+      </div>
+      <div class="row" id="content">
+        <!-- menu -->
+        {% if menu.content %}
+          <div>
+            <nav class="three columns">
+              {{ menu.html | safe }}
+            </nav>
+          </div>
+        {% endif %}
+        <!-- content -->
+        <div class="{% if menu.content %}thirteen columns offset-by-three{% else %}fourteen columns offset-by-one{% endif %}">
+          <!-- flash messages -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <span class="{{ category }}">{{ message }}</span>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+      <div class="row" id="footer">
+        <hr class="remove-bottom" />
+        Wiki powered by <a href="http://projets.joacodepel.tk/flikiss/">FliKISS</a>
+      </div>
+    </div>
   </body>
 </html>
+

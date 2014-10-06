@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block head %}
+  {{ codemirror.include_codemirror() }}
+  <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/inline-attach.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/codemirror.inline-attach.min.js') }}"></script>
+  <script>
+    f = function() {
+            var editor = document.getElementsByClassName('CodeMirror')[0].CodeMirror;
+            drawToolbar(editor, "{{ url_for('.render', name=name) }}");
+            drawPreview(editor);
+            inlineAttach.attachToCodeMirror(editor, {
+                uploadUrl : "{{ url_for('.upload', name=name) }}"               
+            });
+        }
+
+    if (document.readyState === 'complete')
+        f();
+    else if (window.addEventListener)
+        window.addEventListener("load", f, false);
+    else if (window.attachEvent)
+        window.attachEvent("onload", f);
+    else
+        f();
+    </script>
+ {% endblock %}
+ 
+{% block content %}
+  <h3>Edit page</h3>
+  <hr />
+  <form method="post" name="page_post">
+    {{ form.hidden_tag() }}
+    <dl>
+      <dt>{{ form.content.label }}</dt>
+      <dd>{{ form.content(rows=25, cols=40) }}</dd>
+      <dt>{{ form.password.label }}</dt>
+      <dd>{{ form.password() }}</dd>
+    </dl>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
+

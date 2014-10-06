@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if page.content %}
+    {{ page.html | safe }}
+  {% else %}
+    This page is empty
+  {% endif %}
+  <hr class="remove-bottom" />
+  <a href="{{ url_for('.edit', page=page.name, name=name) }}" class="fa fa-edit">Edit</a>
+{% endblock %}  
