@@ -23,3 +23,4 @@ FliKISS does not require any database. Pages are stored in flat files using the 
 - [CherryPy](http://cherrypy.org/) wsgi server
 - [Lockfile](http://pythonhosted.org//lockfile/)
 - [Pygments](http://pygments.org/)
+- [Skeleton](http://getskeleton.com) CSS framework

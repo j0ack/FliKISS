@@ -50,7 +50,8 @@ def run() :
         app.run(port=args.port)
     else :
         # create server
-        server = wsgiserver.CherryPyWSGIServer((args.ip, args.port), app)
+        d = wsgiserver.WSGIPathInfoDispatcher({args.url: app.wsgi_app})
+        server = wsgiserver.CherryPyWSGIServer((args.ip, args.port), d)
         print 'App served on {0}:{1}'.format(args.ip, args.port)
         server.start()
     
