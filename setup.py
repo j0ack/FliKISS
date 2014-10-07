@@ -33,7 +33,7 @@ setup(
     ],
     entry_points = {
         'console_scripts': [
-            'flikiss = flikiss.launcher:main',
+            'flikiss = flikiss.launcher:run',
         ],
     },
 )

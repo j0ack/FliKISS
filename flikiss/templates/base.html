@@ -28,17 +28,11 @@
     <div class="container">
       <!-- header -->
       <div class="row" id="header">
-        <h1>
-          {% if config.WIKI_TITLE %}
-            {{ config.WIKI_TITLE }}
-          {% else %}
-            FliKISS
-          {% endif %}
-        </h1>
+        <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="FliKISS"/>
       </div>
       <div class="row" id="content">
-        <!-- menu -->
         {% if menu.content %}
+        <!-- menu -->
           <div>
             <nav class="three columns">
               {{ menu.html | safe }}

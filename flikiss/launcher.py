@@ -4,7 +4,6 @@
 
 """
     Launcher for FliKISS app
-    ~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
 __author__ = u'TROUVERIE Joachim'
@@ -17,8 +16,8 @@ from flikiss import create_app
 
 def run() :
     """
-        Main launcher for FWiki
-        
+        Main launcher for FliKISS
+
         :param ip: Host to serve the app
         :param port: Port to serve tha app
         :param url: Url to serve the app
@@ -32,7 +31,7 @@ def run() :
     parser.add_argument('-p','--port',help='Port to serve the app',default=8000, type=int)
     parser.add_argument('-u', '--url', help='Url to serve the app',default='/')
     parser.add_argument('-d', '--debug', action='store_true', help='Debug mode')
-    parser.add_argument('-c', '--config', help='Alternative config file', default=None)
+    parser.add_argument('-c', '--config', help='Alternate config file', default=None)
     # parse given args
     args = parser.parse_args()
     # config management
@@ -53,7 +52,7 @@ def run() :
         # create server
         server = wsgiserver.CherryPyWSGIServer((args.ip, args.port), app)
         print 'App served on {0}:{1}'.format(args.ip, args.port)
-        server.run()
+        server.start()
     
     
 if __name__ == '__main__' :

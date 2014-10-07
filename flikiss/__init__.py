@@ -31,7 +31,7 @@ def create_app(config=None) :
     app.config.from_pyfile('config.py')
     # update config
     if config :
-        app.config.from_object(config)
+        app.config.from_pyfile(config)
     # create path
     if not op.exists(app.config.get('PAGES_DIR')) :
         os.makedirs(app.config.get('PAGES_DIR'))

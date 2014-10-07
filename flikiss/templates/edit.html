@@ -7,13 +7,13 @@
   <script src="{{ url_for('static', filename='js/codemirror.inline-attach.min.js') }}"></script>
   <script>
     f = function() {
-            var editor = document.getElementsByClassName('CodeMirror')[0].CodeMirror;
-            drawToolbar(editor, "{{ url_for('.render', name=name) }}");
-            drawPreview(editor);
-            inlineAttach.attachToCodeMirror(editor, {
-                uploadUrl : "{{ url_for('.upload', name=name) }}"               
-            });
-        }
+        var editor = document.getElementsByClassName('CodeMirror')[0].CodeMirror;
+        drawToolbar(editor, "{{ url_for('.render', name=name) }}");
+        drawPreview(editor);
+        inlineAttach.attachToCodeMirror(editor, {
+          uploadUrl : "{{ url_for('.upload', name=name) }}"               
+        });
+    }
 
     if (document.readyState === 'complete')
         f();

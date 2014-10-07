@@ -38,9 +38,8 @@ nav li a:hover {
 }
 
 input[type="submit"],
-input[type="submit"]:hover{
+input[type="submit"]:hover {
     background-color:#98B058;
-    color:#fff;
     font-family:inherit;
 }
 
@@ -69,15 +68,13 @@ pre {
     background:-o-linear-gradient(top, rgba(0,0,0,1) 0%,rgba(72,72,72,0.8) 100%); 
     background:-ms-linear-gradient(top, rgba(0,0,0,1) 0%,rgba(72,72,72,0.8) 100%); 
     background:linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(72,72,72,0.8) 100%); 
-    filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#cc484848',GradientType=0 ); 
-    color:#E0693E;
-    border-bottom:3px solid #98B058;
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#cc484848',GradientType=0); 
+    border-bottom:5px solid #98B058;
 }
 
 #logo {
     margin-left:10px;
-    margin-top:8px;
-    margin-bottom:8px;
+    max-height:100px;
 }
 
 #content {
@@ -112,11 +109,6 @@ pre {
 
 .toolbar span:hover {
     background-color:#98B058;
-}
-
-.toolbar span.active {
-    border:1px solid #98B058;
-    border-radius:2px;
 }
 
 .CodeMirror {

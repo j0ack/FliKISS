@@ -1,0 +1,14 @@
+CherryPy==3.6.0
+Flask==0.10.1
+Flask-WTF==0.10.2
+Jinja2==2.7.3
+Markdown==2.5
+MarkupSafe==0.23
+Pygments==1.6
+WTForms==2.0.1
+Werkzeug==0.9.6
+argparse==1.2.1
+flask-codemirror==0.0.2
+itsdangerous==0.24
+lockfile==0.10.2
+wsgiref==0.1.2
