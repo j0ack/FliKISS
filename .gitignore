@@ -1,4 +1,7 @@
 *.pyc
 venv/*
+dist/*
+build/*
 /flikiss/media/*
 /flikiss/pages/*
+FliKISS.egg-info/*

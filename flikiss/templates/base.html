@@ -34,13 +34,13 @@
         {% if menu.content %}
         <!-- menu -->
           <div>
-            <nav class="three columns">
+            <nav class="three columns" id="menu">
               {{ menu.html | safe }}
             </nav>
           </div>
         {% endif %}
         <!-- content -->
-        <div class="{% if menu.content %}thirteen columns offset-by-three{% else %}fourteen columns offset-by-one{% endif %}">
+        <div class="{% if menu.content %}thirteen columns offset-by-three{% else %}fourteen columns offset-by-one{% endif %}" id="page-container">
           <!-- flash messages -->
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}

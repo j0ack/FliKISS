@@ -57,8 +57,10 @@ td {
     border:1px solid black;
 }
 
-pre {
-    background-color:#6f6f6f;
+code {
+    font-family: "Source Code Pro",monospace;
+    background-color: #EEEFF2;
+    margin:0.1em;
 }
 
 #header {
@@ -81,6 +83,10 @@ pre {
     min-height:300px;
 }
 
+#page-container ul {
+    list-style-type:disc;
+}
+
 #footer {
     padding:5px;
 }
@@ -90,6 +96,12 @@ pre {
     -moz-box-shadow:2px 2px 50px 0px rgba(0,0,0,0.75);
     box-shadow:0px 0px 1em 0px #aaa;
     background-color:#fff;
+}
+
+.codehilite {
+    background-color:#6f6f6f;
+    margin:10px;
+    padding:2px;
 }
 
 .toolbar {
@@ -143,10 +155,15 @@ pre {
 }
 
 .admonition {
-    width:100%;	
+    width:100%;
     -moz-box-shadow:0px 0px 1em 0px #222;
     -webkit-box-shadow:0px 0px 1em 0px #222;
     box-shadow:0px 0px 1em 0px #222;
+}
+
+.admonition p {
+    margin:0;
+    padding:2px;
 }
 
 .admonition-title {
