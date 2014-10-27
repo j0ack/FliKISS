@@ -12,15 +12,16 @@ h1, h2, h3, h4, h5 {
     color:#9CB28E;
 }
 
+h5 {
+    font-weight:bold;
+}
+
 a, a:visited, a:hover {
     color:#65A101;
 }
 
 nav {
     padding:2px;
-    position:fixed;
-    margin-top:10px;
-    margin-left:10px;
 }
 
 nav li a{
@@ -63,6 +64,10 @@ code {
     margin:0.1em;
 }
 
+pre {
+    white-space: pre-wrap;
+}
+
 #header {
     background:-moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(72,72,72,0.8) 100%); 
     background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,1)), color-stop(100%,rgba(72,72,72,0.8))); 
@@ -98,8 +103,12 @@ code {
     background-color:#fff;
 }
 
+.container .columns {
+    margin-left:5px;        
+}
+
 .codehilite {
-    background-color:#6f6f6f;
+    background-color:#EEEEDD;
     margin:10px;
     padding:2px;
 }
@@ -179,9 +188,3 @@ code {
 .warning .admonition-title {
     background-color:#CB4B16;
 }
-
-
-@media only screen and (max-width: 767px) {
-    nav { position:relative; }
-}
-

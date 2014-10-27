@@ -1,3 +1,5 @@
+app.py
+nohup.out
 *.pyc
 venv/*
 dist/*

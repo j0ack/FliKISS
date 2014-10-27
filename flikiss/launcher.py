@@ -28,10 +28,10 @@ def run() :
     parser = ArgumentParser(description=__doc__)
     # add arguments
     parser.add_argument('-i','--ip',help='Host to serve the app',default='127.0.0.1')
-    parser.add_argument('-p','--port',help='Port to serve the app',default=8000, type=int)
-    parser.add_argument('-u', '--url', help='Url to serve the app',default='/')
-    parser.add_argument('-d', '--debug', action='store_true', help='Debug mode')
-    parser.add_argument('-c', '--config', help='Alternate config file', default=None)
+    parser.add_argument('-p','--port',help='Port to serve the app',default=8000,type=int)
+    parser.add_argument('-u','--url',help='Url to serve the app',default='/')
+    parser.add_argument('-d','--debug',action='store_true',help='Debug mode')
+    parser.add_argument('-c','--config',help='Alternate config file',default=None)
     # parse given args
     args = parser.parse_args()
     # config management

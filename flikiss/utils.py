@@ -53,6 +53,46 @@ class InterWikiLinksExtension(Extension) :
         pattern = InterWikiLinksPattern(WIKILINK_RE)
         md.inlinePatterns.add('interwikilink', pattern, "<not_strong")
 
+
+class CenterAlignPattern(Pattern):
+    """
+        Pattern to center elements
+    """
+    def handleMatch(self,m):
+        div = etree.Element('div')
+        div.set('style','display:block;text-align:center;')
+        div.text = m.group(3)
+        return div
+
+
+class RightAlignPattern(Pattern):
+    """
+        Pattern to right elements
+    """    
+    def handleMatch(self,m):
+        div = etree.Element('div')
+        div.set('style','display:block;text-align:right;')
+        div.text = m.group(3)
+        return div
+
+
+class AlignExtension(Extension):
+    """
+        Align extension for Markdown
+        
+        Center or align to right elements
+        -> center element <-
+        -> align to right element ->
+    """
+    def extendMarkdown(self, md, md_globals):       
+        CENTR_RE = r'(\-\>)(.+?)(\<\-)'
+        RIGHT_RE = r'(\-\>)(.+?)(\-\>)'
+        center_pattern = CenterAlignPattern(CENTR_RE)
+        right_pattern = RightAlignPattern(RIGHT_RE)
+        md.inlinePatterns.add('CenterAlign', center_pattern, "<not_strong")
+        md.inlinePatterns.add('RightAlign', right_pattern, "<not_strong")
+
+
 def render_markdown(content) :
     """
         Translate markdown to HTML
@@ -60,5 +100,6 @@ def render_markdown(content) :
         :param content: markdown content
     """
     return markdown(content, extensions=['codehilite','tables',
-                             'admonition', InterWikiLinksExtension()])
+                             'admonition', InterWikiLinksExtension(),
+                             AlignExtension()])
 

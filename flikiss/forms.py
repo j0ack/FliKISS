@@ -9,16 +9,18 @@
 
 __author__ = u'TROUVERIE Joachim'
 
-from wtforms import PasswordField
-from flask.ext.codemirror.fields import CodeMirrorField
+from wtforms import PasswordField, TextAreaField
 from flask.ext.wtf import Form
 
 class PageForm(Form) :
     """
         Page form
     """
-    password = PasswordField('Password')
-    content = CodeMirrorField(language='markdown',
-                                config = {'lineWrapping' : 'true' },
-                                label = 'Content')
+    markdown_content = TextAreaField('Content') 
 
+
+class LoginForm(Form) :
+    """
+        Login form
+    """
+    password = PasswordField('Password')

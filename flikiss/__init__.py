@@ -15,9 +15,8 @@ __author__ = u'TROUVERIE Joachim'
 import os
 import os.path as op
 from flask import Flask
-from flask.ext.codemirror import CodeMirror
 
-from flikiss.views import wiki
+from flikiss.views import wiki, render, upload, media, logout
 
 def create_app(config=None) :
     """
@@ -37,8 +36,11 @@ def create_app(config=None) :
         os.makedirs(app.config.get('PAGES_DIR'))
     if not op.exists(app.config.get('UPLOAD_DIR')) :
         os.makedirs(app.config.get('UPLOAD_DIR'))
-    # extension
-    codemirror = CodeMirror(app)
+    # register main routes
+    app.add_url_rule('/logout/', 'logout', logout)
+    app.add_url_rule('/render/', 'render', render, methods=['POST'])
+    app.add_url_rule('/upload/', 'upload', upload, methods=['POST'])
+    app.add_url_rule('/media/<filename>', 'media', media)
     # main blueprint
     app.register_blueprint(wiki, url_defaults={'name' : None})
     # blueprints

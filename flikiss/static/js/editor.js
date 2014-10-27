@@ -1,230 +1,245 @@
-/***
-* JavaScript for Markdown Editor
-* https://github.com/lepture/editor/blob/master/src/intro.js
-* author : Hsiaoming Yang
-**/
-
 /**
-* Get state of editor
-**/
-function _getState(cm, pos) {
-  pos = pos || cm.getCursor('start');
-  var stat = cm.getTokenAt(pos);
-  if (!stat.type) return {};
-
-  var types = stat.type.split(' ');
-
-  var ret = {}, data, text;
-  for (var i = 0; i < types.length; i++) {
-    data = types[i];
-    if (data === 'strong') {
-      ret.bold = true;
-    } 
-    else if (data === 'em') {
-      ret.italic = true;
-    }
-  }
-  return ret;
-}
-
-/**
-* Replace text in editor
-**/
-function _replaceSelection(cm, start, end) {
-  var startPoint = cm.getCursor('start');
-  var endPoint = cm.getCursor('end');
-  
-  var text = cm.getSelection();
-  cm.replaceSelection(start + text + end);
-
-  startPoint.ch += start.length;
-  endPoint.ch += start.length;
-  
-  cm.setSelection(startPoint, endPoint);
-  cm.focus();
-}
-
-
-/**
-* Set text to bold
-**/
-function toggleBold(editor) {
-  var stat = _getState(editor);
-
-  var text;
-  var start = '**';
-  var end = '**';
-
-  var startPoint = editor.getCursor('start');
-  var endPoint = editor.getCursor('end');
-  if (stat.bold) {
-    text = editor.getLine(startPoint.line);
-    start = text.slice(0, startPoint.ch);
-    end = text.slice(startPoint.ch);
-
-    start = start.replace(/^(.*)?(\*|\_){2}(\S+.*)?$/, '$1$3');
-    end = end.replace(/^(.*\S+)?(\*|\_){2}(\s+.*)?$/, '$1$3');
-    startPoint.ch -= 2;
-    endPoint.ch -= 2;
-    editor.setLine(startPoint.line, start + end);
-  } 
-  
-  else {
-    text = editor.getSelection();
-    editor.replaceSelection(start + text + end);
-
-    startPoint.ch += 2;
-    endPoint.ch += 2;
-  }
-
-  editor.setSelection(startPoint, endPoint);
-  editor.focus();
-}
-
-/**
-* Set text to italic
-**/
-function toggleItalic(editor) {
-  var stat = _getState(editor);
-
-  var text;
-  var start = '*';
-  var end = '*';
-
-  var startPoint = editor.getCursor('start');
-  var endPoint = editor.getCursor('end');
-  if (stat.bold) {
-    text = editor.getLine(startPoint.line);
-    start = text.slice(0, startPoint.ch);
-    end = text.slice(startPoint.ch);
-
-    start = start.replace(/^(.*)?(\*|\_)(\S+.*)?$/, '$1$3');
-    end = end.replace(/^(.*\S+)?(\*|\_)(\s+.*)?$/, '$1$3');
-    startPoint.ch -= 1;
-    endPoint.ch -= 1;
-    editor.setLine(startPoint.line, start + end);
-  } 
-
-  else {
-    text = editor.getSelection();
-    editor.replaceSelection(start + text + end);
-
-    startPoint.ch += 1;
-    endPoint.ch += 1;
-  } 
-
-  editor.setSelection(startPoint, endPoint);
-  editor.focus();
-}
-
-/**
-* Action for drawing a link.
-*/
-function drawLink(editor) {
-  var stat = _getState(editor);
-  _replaceSelection(editor, '[', '](http://)');
-}
-
-
-/**
-* Action for drawing an img.
-*/
-function drawImage(editor) {
-  var stat = _getState(editor);
-  _replaceSelection(editor, '![', '](/<your_file_url>)');
-}
-
-/**
- * Action to toggle preview
+ * Markdown editor
+ * inspired from https://github.com/lepture/editor/blob/master/src/intro.js
+ * @author : TROUVERIE Joachim
  **/
-function togglePreview(editor, convert_url) {
-  var wrapper = editor.getWrapperElement();
-  var preview = document.getElementById('markdown_preview');
-  var btn = document.getElementById('preview_btn');
-  if (wrapper.style.display != 'none') {
-    // send request to server with value
-    btn.className = btn.className.replace('fa-eye', 'fa-spin fa-spinner');
-    var text = editor.getValue();
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function() {
-      if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
-          var data = JSON.parse(httpRequest.responseText);
-          preview.innerHTML = data.value;
-          preview.style.display = 'block';
-          wrapper.style.display = 'none';
-          btn.className = btn.className.replace('fa-spin fa-spinner', 'fa-eye-slash');
+ 
+/**
+ * Editor class
+ * @param textarea_id : Textarea id to create CodeMirror instance
+ * @param upload_url : Url used to upload files with DnD
+ * @param convert_url : Url used to convert Markdown into html
+ **/
+function Editor(textarea_id, upload_url, convert_url) {
+    var self = this;
+    // codemirror
+    self.codemirror = CodeMirror.fromTextArea(
+        document.getElementById(textarea_id), {
+            "theme": "xq-light",
+            "mode": "markdown",
+            "lineWrapping": "true"
+        });
+    
+    // manage drag and drop
+    self.upload_url = upload_url;
+    self.codemirror.setOption('onDragEvent', function(data, event) {
+        if ( event.type === 'drop' ) {
+            event.stopPropagation();
+            event.preventDefault();
+            // test formdata
+            if ( !!window.FormData ) {
+                var formdata = new FormData();
+                // number of files
+                if ( event.dataTransfer.files.length === 1 ) {
+                    // images
+                    if ( event.dataTransfer.files[0].type.match(/image.*/) ) {
+                        // add wait text on editor
+                        var text = '![Please wait during upload...]()';
+                        var cursor = self.codemirror.getCursor('start');
+                        var line = self.codemirror.getLine(cursor.line);
+                        var new_value = line.slice(0, cursor.ch) + text + line.slice(cursor.ch);
+                        self.codemirror.setLine(cursor.line, new_value);
+                        self.codemirror.focus();
+                        // Ajax
+                        formdata.append('file', event.dataTransfer.files[0]);
+                        var httpRequest = new XMLHttpRequest();
+                        httpRequest.onreadystatechange = function() {
+                            if (httpRequest.readyState === 4) {
+                                if (httpRequest.status === 200) {
+                                    var data = JSON.parse(httpRequest.responseText);
+                                    if (data.error) {                                        
+                                        self.codemirror.setLine(cursor.line, new_value.replace(text, ''));
+                                        alert(data.error);
+                                    }
+                                    else {
+                                        self.codemirror.setLine(cursor.line, new_value.replace(text, '![' + data.name + ']('+ data.url +')'));
+                                    }
+                                    self.codemirror.focus();
+                                }
+                            }
+                        };
+                        httpRequest.open('POST', self.upload_url);
+                        httpRequest.send(formdata);
+                    }
+                    // plain text
+                    else if ( event.dataTransfer.files[0].type.match(/text.*/) ) {
+                        // read file
+                        if ( typeof FileReader != 'undefined' ) {
+                            var reader = new FileReader();
+                            // paste its content
+                            reader.onload = function() {
+                                var text = reader.result;
+                                var cursor = self.codemirror.getCursor('start');
+                                var line = self.codemirror.getLine(cursor.line);
+                                var new_value = line.slice(0, cursor.ch) + text + line.slice(cursor.ch);
+                                self.codemirror.setLine(cursor.line, new_value);
+                                self.codemirror.focus();
+                            }
+                            reader.readAsText(event.dataTransfer.files[0]);
+                        }
+                        else alert('FileReader not supported');
+                    }
+                    else alert('File format not supported');
+                }
+                else alert('You can upload only one file');
+            }
+            else alert('Your browser does not seem to support HTML5 Drag and drop API');
+            
+            return true;
         }
-      }
-    };
-    httpRequest.open('POST', convert_url);
-    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    httpRequest.send('content=' + text); 
-  }
-  else {
-    preview.style.display = 'none';
-    wrapper.style.display = 'block';
-    btn.className = btn.className.replace('fa-eye-slash', 'fa-eye');
-  }   
-}   
+    });
+    
+    self.convert_url = convert_url;
 
+    /*
+     * Define if current line is in given state
+     */
+    self._getState = function(state) {
+        var pos = self.codemirror.getCursor('start');
+        var stat = self.codemirror.getTokenAt(pos);
+        if (!stat.type) return false;
 
-/**
- * Draw toolbar for editor
- **/
-function drawToolbar(editor, convert_url) {
+        var types = stat.type.split(' ');
+
+        for (ii = 0; ii < types.length; ii++) {
+            var data = types[ii];
+            if (data === 'strong' && state === 'bold') {
+                return true;
+            } 
+            else if (data === 'em' && state === 'italic') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    /*
+     * Replace selection adding prefix and suffix
+     */
+    self._replaceSelection = function(prefix, suffix) {
+        var start = self.codemirror.getCursor('start');
+        var stop = self.codemirror.getCursor('end');
+
+        var text = self.codemirror.getSelection();
+        self.codemirror.replaceSelection(prefix + text + suffix);
+
+        start.ch += prefix.length;
+        stop.ch += suffix.length;
+
+        self.codemirror.setSelection(start, stop);
+        self.codemirror.focus();
+    }
+
+    /*
+     * Toggle state for selection
+     */
+    self._toggleSelection = function(prefix, suffix, state) {
+        var state = self._getState(state);
+
+        // already in state
+        if (state) {
+            // get cursor
+            var cursor = self.codemirror.getCursor('start');
+            // get cursor line
+            var line = self.codemirror.getLine(cursor.line);
+            // split to keep only value with cursor
+            var prefix_index = line.slice(0, cursor.ch).lastIndexOf(prefix);
+            var suffix_index = cursor.ch + line.slice(cursor.ch).indexOf(suffix);
+            // replace line
+            line = line.slice(0, prefix_index) + line.slice(prefix_index + prefix.length, suffix_index) + line.slice(suffix_index + suffix.length)
+            self.codemirror.setLine(cursor.line, line);
+            self.codemirror.focus();
+        } 
+        else {
+            self._replaceSelection(prefix, suffix);
+        }
+    }
+
+    /**
+     * draw editor toolbar
+     */
     var container = document.createElement('div');
     container.className = 'toolbar';
+
     // bold
     var bold = document.createElement('span');
     bold.className = 'fa fa-bold';
-    bold.onclick = function(evt) {
-        toggleBold(editor);
+    bold.onclick = function(in_event) {
+        self._toggleSelection('**', '**', 'bold');
     }
     container.appendChild(bold);
     // italic
     var italic = document.createElement('span');
     italic.className = 'fa fa-italic';
-    italic.onclick = function(evt) {
-        toggleItalic(editor);
+    italic.onclick = function(in_event) {
+        self._toggleSelection('*', '*', 'italic');
     }
     container.appendChild(italic);
     // img
     var img = document.createElement('span');
     img.className = 'fa fa-photo'
-    img.onclick = function(evt) {
-        drawImage(editor);
+    img.onclick = function(in_event) {
+        self._replaceSelection('![', '](/<your_file_url>)');
     }
     container.appendChild(img);
     // link
     var link = document.createElement('span');
     link.className = 'fa fa-link';
-    link.onclick = function(evt) {
-        drawLink(editor);
+    link.onclick = function(in_event) {
+        self._replaceSelection('[', '](http://)');
     }
     container.appendChild(link);
+    // undo
+    var undo = document.createElement('span');
+    undo.onclick = function() {
+        self.codemirror.undo();
+    }
+    undo.className = 'fa fa-undo';
+    container.appendChild(undo);
     // preview
     var preview = document.createElement('span');
-    preview.onclick = function(evt) {
-        togglePreview(editor, convert_url);
+    preview.onclick = function(in_event) {
+        // create div if not exists
+        var div = document.getElementById('markdown_preview');
+        var wrapper = self.codemirror.getWrapperElement();
+        var btn = this; 
+        if (div == null) {
+            div = document.createElement('div');
+            div.setAttribute('id', 'markdown_preview');
+            div.style.display = 'none';
+            wrapper.parentNode.insertBefore(div, wrapper.nextSibling);
+        }
+        // show div
+        if (wrapper.style.display != 'none') {
+            // send request to server with value
+            btn.className = btn.className.replace('fa-eye', 'fa-spin fa-spinner');
+            var text = self.codemirror.getValue();
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = function() {
+                if (httpRequest.readyState === 4) {
+                    if (httpRequest.status === 200) {
+                        var data = JSON.parse(httpRequest.responseText);
+                        div.innerHTML = data.value;
+                        div.style.display = 'block';
+                        wrapper.style.display = 'none';
+                        btn.className = btn.className.replace('fa-spin fa-spinner', 'fa-eye-slash');
+                    }
+                }
+            };
+            httpRequest.open('POST', self.convert_url);
+            httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            httpRequest.send('content=' + text);
+        } 
+        else {
+            div.style.display = 'none';
+            wrapper.style.display = 'block';
+            btn.className = btn.className.replace('fa-eye-slash', 'fa-eye');
+        }
     }
-    preview.setAttribute('id', 'preview_btn');
     preview.className = 'fa fa-eye';
     container.appendChild(preview);
-
     // append container
-    var wrapper = editor.getWrapperElement();
+    var wrapper = self.codemirror.getWrapperElement();
     wrapper.parentNode.insertBefore(container, wrapper);
 }
-
-/**
- * Insert preview div
- **/
-function drawPreview(editor) {
-    var wrapper = editor.getWrapperElement();
-    var preview = document.createElement('div');
-    preview.setAttribute('id', 'markdown_preview');
-    preview.style.display = 'none';
-    wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
-}
-

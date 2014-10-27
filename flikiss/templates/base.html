@@ -28,7 +28,7 @@
     <div class="container">
       <!-- header -->
       <div class="row" id="header">
-        <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="FliKISS"/>
+        <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="FliKISS"/> 
       </div>
       <div class="row" id="content">
         {% if menu.content %}
@@ -36,11 +36,17 @@
           <div>
             <nav class="three columns" id="menu">
               {{ menu.html | safe }}
+              {% if session.user %}
+                <hr />
+                <ul>
+                  <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+              {% endif %}
             </nav>
           </div>
         {% endif %}
         <!-- content -->
-        <div class="{% if menu.content %}thirteen columns offset-by-three{% else %}fourteen columns offset-by-one{% endif %}" id="page-container">
+        <div class="{% if menu.content %}thirteen columns{% else %}fourteen columns offset-by-one{% endif %}" id="page-container">
           <!-- flash messages -->
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
