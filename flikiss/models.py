@@ -67,7 +67,7 @@ class Page(object) :
             return None
         # lock file to prevent concurrent access
         with lock(self.path) :
-            return open(self.path).read()
+            return open(self.path).read().decode('utf-8')
 
 
     @content.setter
@@ -91,7 +91,7 @@ class Page(object) :
             # lock file to prevent concurrent access
             with lock(self.path) :
                 with open(self.path, 'wb') as page :
-                    page.write(value)
+                    page.write(value.encode('utf-8'))
 
 
     @property

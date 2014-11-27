@@ -19,7 +19,7 @@ setup(
     author = __author__,
     author_email = 'joachim.trouverie@joacodepel.tk',
     description = 'Wiki engine based on Markdown flat files powered by Flask',
-    long_description = open('README.md').read(),
+    long_description = open('README.rst').read(),
     install_requires = requirements,
     include_package_data=True,
     url='http://projects.joacodepel.tk/flikiss/',
