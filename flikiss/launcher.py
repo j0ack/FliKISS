@@ -39,7 +39,7 @@ def run() :
         app = create_app(args.config)
     else :
         # default config
-        config_path = op.expanduser('~/.fwikirc')
+        config_path = op.expanduser('~/.flikissrc')
         if op.exists(config_path) :
             app = create_app(config_path)
         else :
