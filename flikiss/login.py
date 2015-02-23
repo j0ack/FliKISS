@@ -13,29 +13,30 @@ from functools import wraps
 
 from flask import session, redirect, url_for, flash, request
 
-def login_required(func) :
+
+def login_required(func):
     """
         Decorator to provide very simple
         auth control on views
     """
     @wraps(func)
-    def decorated_view(*args, **kwargs) :
-        if not session.get('user') :
+    def decorated_view(*args, **kwargs):
+        if not session.get('user'):
             flash('You must be logged in to access this page', 'info')
             return redirect(url_for('.login', next=request.url))
-        else :
+        else:
             return func(*args, **kwargs)
     return decorated_view
 
 
-def login_user() :
+def login_user():
     """
         Log an admin user in session
     """
     session['user'] = 'Admin'
 
 
-def logout_user() :
+def logout_user():
     """
         Log out user
     """

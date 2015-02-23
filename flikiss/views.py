@@ -25,7 +25,7 @@ wiki = Blueprint('wiki', __name__)
 
 
 @wiki.route('/')
-def page(name) :
+def page(name):
     """
         Render page
     """
@@ -38,9 +38,9 @@ def page(name) :
     return render_template('page.html', menu=menu, page=page, name=name)
 
 
-@wiki.route('/_edit/', methods=['GET','POST'])
+@wiki.route('/_edit/', methods=['GET', 'POST'])
 @login_required
-def edit(name) :
+def edit(name):
     """
         Edit page
     """
@@ -52,31 +52,31 @@ def edit(name) :
     menu = Page(menu_name, name)
     # fill form
     form = PageForm(markdown_content=page.content)
-    if form.validate_on_submit() :
+    if form.validate_on_submit():
         # save file
         page.content = form.markdown_content.data
-        if page.content :
+        if page.content:
             flash('Page saved', 'info')
-        else :
+        else:
             flash('Page removed', 'info')
         return redirect(url_for('.page', page=page_name, name=name))
     return render_template('edit.html', form=form, menu=menu, name=name)
 
 
-@wiki.route('/_login/', methods=['GET','POST'])
-def login(name) :
+@wiki.route('/_login/', methods=['GET', 'POST'])
+def login(name):
     """
         Login view
     """
     menu_name = current_app.config.get('MENU_PAGE')
     menu = Page(menu_name, name)
     form = LoginForm()
-    if form.validate_on_submit() :
+    if form.validate_on_submit():
         password = form.password.data
-        if password == current_app.config.get('PASSWORD') :
+        if password == current_app.config.get('PASSWORD'):
             login_user()
             return redirect(request.args.get('next') or url_for('.page'))
-        else :
+        else:
             flash('Invalid password', 'error')
     return render_template('login.html', form=form, menu=menu)
 
@@ -87,39 +87,39 @@ def logout():
     """
     logout_user()
     return redirect('/')
-    
 
-@login_required    
-def upload() :
+
+@login_required
+def upload():
     """
         Upload images from edit page
     """
     # get file
     img = request.files['file']
-    if img :
+    if img:
         # upload it
         filename = secure_filename(img.filename)
         path = current_app.config.get('UPLOAD_DIR', '.')
         img.save(op.join(path, filename))
         # contruct url
         url = url_for('media', filename=filename)
-        return jsonify(url=url,name=filename)
+        return jsonify(url=url, name=filename)
     return jsonify(error='Error while uploading the picture')
 
 
-def media(filename) :
+def media(filename):
     """
         Media files
 
-        :param filename: File name
+       :param filename: File name
     """
     path = current_app.config.get('UPLOAD_DIR', '.')
     return send_from_directory(path, filename=filename)
 
 
-def render() :
+def render():
     """
         Render markdown
     """
-    content = request.form.get('content','')
+    content = request.form.get('content', '')
     return jsonify(value=render_markdown(content))

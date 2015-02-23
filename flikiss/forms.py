@@ -12,14 +12,17 @@ __author__ = u'TROUVERIE Joachim'
 from wtforms import PasswordField, TextAreaField
 from flask.ext.wtf import Form
 
-class PageForm(Form) :
+
+class PageForm(Form):
+
     """
         Page form
     """
-    markdown_content = TextAreaField('Content') 
+    markdown_content = TextAreaField('Content')
 
 
-class LoginForm(Form) :
+class LoginForm(Form):
+
     """
         Login form
     """

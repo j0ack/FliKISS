@@ -18,32 +18,33 @@ from flask import current_app
 from flikiss.utils import render_markdown
 
 
-class Page(object) :
+class Page(object):
+
     """
         Page object
 
-        :param name: Page name
-        :param prefix: Page path prefix
+       :param name: Page name
+       :param prefix: Page path prefix
     """
-    def __init__(self, name, prefix=None) :
+
+    def __init__(self, name, prefix=None):
         self.name = self._slugify(name)
         self.prefix = prefix
 
-
-    def _slugify(self, name) :
+    @classmethod
+    def _slugify(cls, name):
         """
             Slugify name
-            
-            :param name: Page name            
+
+           :param name: Page name
         """
         # remove special chars
-        value = re.sub('[^\w\s-]', '', name).strip().lower()
+        value = re.sub(r'[^\w\s-]', '', name).strip().lower()
         # remove spaces
-        return re.sub('[-\s]+', '-', value)
-
+        return re.sub(r'[-\s]+', '-', value)
 
     @property
-    def path(self) :
+    def path(self):
         """
             Page absolute path
         """
@@ -52,55 +53,52 @@ class Page(object) :
         # get files extension from config
         ext = current_app.config.get('FILE_EXTENSION')
         # add prefix to path if exists
-        if self.prefix :
+        if self.prefix:
             return op.join(dirpath, self.prefix, self.name + ext)
-        else :
+        else:
             return op.join(dirpath, self.name + ext)
 
-
     @property
-    def content(self) :
+    def content(self):
         """
             Page content or None if file does not exists
         """
-        if not op.exists(self.path) :
+        if not op.exists(self.path):
             return None
         # lock file to prevent concurrent access
-        with lock(self.path) :
+        with lock(self.path):
             return open(self.path).read().decode('utf-8')
 
-
     @content.setter
-    def content(self, value) :
+    def content(self, value):
         """
             Save or remove object
 
-            :param value: New content if `None` or empty then file is removed
+           :param value: New content if `None` or empty then file is removed
         """
         # delete page
-        if not value :
-            if op.exists(self.path) :
+        if not value:
+            if op.exists(self.path):
                 os.remove(self.path)
         # save content
-        else :
+        else:
             # get path
             dirname = op.dirname(self.path)
             # create path if not exists
-            if not op.exists(dirname) :
+            if not op.exists(dirname):
                 os.makedirs(dirname)
             # lock file to prevent concurrent access
-            with lock(self.path) :
-                with open(self.path, 'wb') as page :
+            with lock(self.path):
+                with open(self.path, 'wb') as page:
                     page.write(value.encode('utf-8'))
 
-
     @property
-    def html(self) :
+    def html(self):
         """
             Html repr if file exists or None
         """
         # check if file exists
-        if not self.content :
+        if not self.content:
             return None
         # translate Markdown to HTML
         return render_markdown(self.content)

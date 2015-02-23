@@ -1,9 +1,9 @@
 #! /usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
 
 """
-    FliKISS 
+    FliKISS
     ~~~~~~~
 
     A personal wiki engine inspired from BlazeKISS
@@ -18,23 +18,24 @@ from flask import Flask
 
 from flikiss.views import wiki, render, upload, media, logout
 
-def create_app(config=None) :
+
+def create_app(config=None):
     """
         App factory
-        
-        :param config: Config file path
+
+       :param config: Config file path
     """
     # create app
     app = Flask(__name__)
     # default config
     app.config.from_pyfile('config.py')
     # update config
-    if config :
+    if config:
         app.config.from_pyfile(config)
     # create path
-    if not op.exists(app.config.get('PAGES_DIR')) :
+    if not op.exists(app.config.get('PAGES_DIR')):
         os.makedirs(app.config.get('PAGES_DIR'))
-    if not op.exists(app.config.get('UPLOAD_DIR')) :
+    if not op.exists(app.config.get('UPLOAD_DIR')):
         os.makedirs(app.config.get('UPLOAD_DIR'))
     # register main routes
     app.add_url_rule('/logout/', 'logout', logout)
@@ -42,11 +43,10 @@ def create_app(config=None) :
     app.add_url_rule('/upload/', 'upload', upload, methods=['POST'])
     app.add_url_rule('/media/<filename>', 'media', media)
     # main blueprint
-    app.register_blueprint(wiki, url_defaults={'name' : None})
+    app.register_blueprint(wiki, url_defaults={'name': None})
     # blueprints
     bps = app.config.get('NAMESPACES', [])
-    for bp in bps :
-        app.register_blueprint(wiki, url_prefix='/{0}'.format(bp), 
-                               url_defaults={'name' : bp})    
+    for blueprint in bps:
+        app.register_blueprint(wiki, url_prefix='/{0}'.format(blueprint),
+                               url_defaults={'name': blueprint})
     return app
-

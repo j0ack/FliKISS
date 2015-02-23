@@ -7,3 +7,4 @@ build/*
 /flikiss/media/*
 /flikiss/pages/*
 FliKISS.egg-info/*
+docs/_build/*

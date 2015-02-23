@@ -21,4 +21,4 @@ UPLOAD_DIR = op.join(op.dirname(__file__), 'media')
 START_PAGE = 'index'
 MENU_PAGE = 'menu'
 FILE_EXTENSION = '.md'
-NAMESPACES= []
+NAMESPACES = []
