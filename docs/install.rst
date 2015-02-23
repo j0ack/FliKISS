@@ -6,7 +6,7 @@ You need to have Python installed on your server to use FliKISS. The install scr
 With pip
 --------
 
-If you already have ``pip`` installed on your server you can use it to install FliKISS::
+If you already have ``pip`` installed on your server you can use it to install FliKISS
 
 .. code-block:: bash
 

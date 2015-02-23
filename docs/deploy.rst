@@ -11,7 +11,7 @@ Launch on port 80
 
 CherryPy stands on its own, but as an application server, it is often located in shared or complex environments. 
 
-If it is not your case you can deploy FliKISS launching it with the following parameters as a daemon::
+If it is not your case you can deploy FliKISS launching it with the following parameters as a daemon
 
 .. code-block:: bash
 
@@ -47,7 +47,7 @@ Here's for example a simple `Nginx`_ configuration which proxies to an applicati
         }
     }
     
-You can make some adjustments to get a better user experience::
+You can make some adjustments to get a better user experience
 
 .. code-block:: nginx
 

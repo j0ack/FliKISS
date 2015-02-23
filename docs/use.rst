@@ -71,7 +71,7 @@ will be rendered as
 
 The CodeHilite extension follows the same syntax as regular Markdown code blocks, with one exception. The hiliter needs to know what language to use for the code block.
 It will use `Pygments`_ to highlight syntax.
-If the first line begins with three or more colons, the text following the colons identifies the language. The first line is removed from the code block before processing and line numbers are not used::
+If the first line begins with three or more colons, the text following the colons identifies the language. The first line is removed from the code block before processing and line numbers are not used
 
 .. code-block:: markdown
 
@@ -100,7 +100,7 @@ It is possible to use a different label suffixing your link with a ``|`` and you
 
 The following text
 
-.. code_block:: markdown
+.. code-block:: markdown
 
     [[Index]]
     [[Index|Home]]
@@ -108,7 +108,7 @@ The following text
     
 will be rendered as
 
-.. code_block:: html
+.. code-block:: html
 
     <a href="/?page=Index">Index</a>
     <a href="/?page=Index">Home</a>
@@ -121,7 +121,7 @@ The Admonition extension adds admonitions to Markdown documents. FliKISS comes w
 
 The following text
 
-.. code_block:: markdown
+.. code-block:: markdown
 
     !!! Admonition_class "A title"
         My text
@@ -134,7 +134,7 @@ The following text
         
 will be rendered as
 
-.. code_block:: html
+.. code-block:: html
 
     <div class="admonition Admonition_class">
       <p class="admonition-title">A title</p>
@@ -155,14 +155,14 @@ The Markdown syntax does not come with a functionnality to easily align your con
 
 FliKISS comes with `Mou`_ syntax to center or right align your contents.
 
-.. code_block:: markdown
+.. code-block:: markdown
 
     -> A center content <-
     -> A right align content ->
 
 will be rendered as
 
-.. code_block:: html
+.. code-block:: html
 
     <div style="display:block;text-align:center;"> A center content </div>
     <div style="display:block;text-align:right;"> A right align content </div>

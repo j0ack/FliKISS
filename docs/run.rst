@@ -13,16 +13,20 @@ If you have installed it in a virtualenv you need to prefix it with your virtual
     $ flikiss --ip 127.0.0.1 --port 8000 --url / --config /home/test/.flikissrc
   
 .. option:: -i, --ip
-    determine the host to serve the application (default=127.0.0.1)
+
+            determine the host to serve the application (default=127.0.0.1)
     
 .. option:: -p, --port
-    determine the port to serve the application (default=8000)
+
+            determine the port to serve the application (default=8000)
     
 .. option:: -u, --url
-    determine the url to serve the application (default=/)
+
+            determine the url to serve the application (default=/)
     
 .. option:: -c, --config
-    alternate config file
+
+            alternate config file
 
 That's it, FliKISS now run on the port given in argument you can then access it at ``http://ip:port/url/``
 
