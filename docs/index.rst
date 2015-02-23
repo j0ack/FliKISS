@@ -1,8 +1,6 @@
 Welcome to FliKISS documentation
 ================================
 
-.. image:: 
-
 **FliKISS** is a `KISS`_ wiki engine inspired by `BlazeKISS`_ a fork of `Wikiss`_ and
 developed with `Flask`_.
 
@@ -11,14 +9,14 @@ without needing to install a database. Pages are stored in flat files on
 the disk.
 
 .. toctree::
-    :maxdepth:2
+    :maxdepth: 2
     
     install.rst
     config.rst
     run.rst
     deploy.rst
     use.rst
-    aknowledgements.rst
+    acknowledgements.rst
 
 .. _KISS: http://en.wikipedia.org/wiki/KISS_principle
 .. _BlazeKISS: http://projet.idleman.fr/blazekiss/
