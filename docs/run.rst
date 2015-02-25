@@ -11,22 +11,24 @@ If you have installed it in a virtualenv you need to prefix it with your virtual
 .. code-block:: bash
 
     $ flikiss --ip 127.0.0.1 --port 8000 --url / --config /home/test/.flikissrc
-  
-.. option:: -i, --ip
 
-            determine the host to serve the application (default=127.0.0.1)
+..
+
+    .. option:: -i, --ip
+
+                determine the host to serve the application (default=127.0.0.1)
     
-.. option:: -p, --port
+    .. option:: -p, --port
 
-            determine the port to serve the application (default=8000)
+                determine the port to serve the application (default=8000)
     
-.. option:: -u, --url
+    .. option:: -u, --url
 
-            determine the url to serve the application (default=/)
+                determine the url to serve the application (default=/)
     
-.. option:: -c, --config
+    .. option:: -c, --config
 
-            alternate config file
+                alternate config file
 
 That's it, FliKISS now run on the port given in argument you can then access it at ``http://ip:port/url/``
 
@@ -42,7 +44,7 @@ To run a command in background you can run it in a shell background process with
 
 .. code-block:: bash
 
-    $ nohup your_app [-options]
+    $ nohup flikiss [-options]
     
 Or run it in a `screen`_
 
@@ -58,12 +60,12 @@ Supervisor
 
 `Supervisor`_ is a program to manage processes, it can be easily installed using your package manager or ``pip``.
 
-Create a configuration file ``/etc/supervisor/conf.d/your-app.conf``
+Create a configuration file ``/etc/supervisor/conf.d/flikiss.conf``
 
 .. code-block:: ini
 
-    [program:your-app]
-    command=your-app [-options]
+    [program:flikiss]
+    command=flikiss [-options]
     directory=/path-to-home/
     environment=HOME='/path-to-home/'
     autostart=true
